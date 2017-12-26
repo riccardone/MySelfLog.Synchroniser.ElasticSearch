@@ -1,0 +1,34 @@
+{
+  "name": "MySelfLog.Synchroniser.ElasticSearch",
+  "version": "1.0.0.0",
+  "main": "app.js",
+  "repository": "https://github.com/riccardone/MySelfLog.Synchroniser.ElasticSearch",
+  "author": "riccardone <riccardo@dinuzzo.it>",
+  "license": "APSL-2.0",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cross-env": "^5.0.5",
+    "elasticsearch": "^13.3.1",
+    "log4js": "^2.3.4",
+    "node-eventstore-client": "^0.1.8",
+    "uuid": "^3.1.0",
+    "yarn": "^1.2.1"
+  },
+  "scripts": {
+    "test": "mocha",
+    "ci": "cross-env NODE_ENV=ci mocha",
+    "coverage": "cross-env NODE_ENV=ci nyc mocha",
+    "start": "node ./src/app.js",
+    "deploy-test": "cross-env NODE_ENV=test node ./src/app.js",
+    "deploy-prod": "cross-env NODE_ENV=prod node ./src/app.js",
+    "build-version": "node ./build/get-version.js"
+  },
+  "devDependencies": {
+    "eslint": "^4.9.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^4.0.1",
+    "nyc": "^11.2.1",
+    "sinon": "^4.0.1",
+    "supertest": "^3.0.0"
+  }
+}
