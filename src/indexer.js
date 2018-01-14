@@ -5,61 +5,109 @@ var cfg = require('./config');
 
 var eventBus = busModule();
 var _docsReady = [];
-var _docsForSanctionsReady = [];
-var _docType, _link, _interval, _client;
-var _indexName;
+var _diaryEventDocsReady = [];
+var _client;
+var _interval;
 
-function Indexer(link, indexName, docType, flushInterval) {
-    _indexName = indexName;
-    _docType = docType;
-    eventBus.subscribe(_docType + "Received", (doc) => {
+function Indexer(link) {
+    init();
+    subscribeMe();
+}
+
+function subscribeMe(){
+    eventBus.subscribe("diaryEventReceived", (doc) => {
+        _diaryEventDocsReady.push(doc);
+    });
+    eventBus.subscribe("diaryLogReceived", (doc) => {
         _docsReady.push(doc);
     });
-    _link = link;
+}
+
+function init() {
     _client = new elasticsearch.Client({
-        host: _link,
+        host: cfg.elasticSearchLink,
         log: 'trace'
     });
-    initIndex(_indexName);
-    _interval = setInterval(flushDocuments, flushInterval);
+    initIndex("diary-events", putMappingsForDiaryEvents)
+        .then((response) => {
+            return initIndex(cfg.elasticSearchIndexName, putMappings);
+        }).then((response) => {
+            _interval = setInterval(function () {
+                _docsReady = flusher(_docsReady, cfg.elasticSearchIndexName, "diaryLog");
+                _diaryEventDocsReady = flusher(_diaryEventDocsReady, "diary-events", "diaryEvent");
+            }, cfg.elasticSearchFlushInterval);
+        }).catch((error) => {
+            logger.error(error);
+        })
 }
 
-function initIndex(indexName) {
-    _client.indices.exists({ index: indexName }).then(function (indexExists) {
-        if (!indexExists) {
-            _client.indices.create({ index: indexName }).then(function (response) {
-                console.log("Index '" + indexName + "' created");
-            }, function (error) {
-                console.log(error.message);
-            });
-        }
-    }, function (error) {
-        console.log(error.message);
-    });
-}
-
-function flushDocuments() {
-    if (_docsReady.length > 0) {
-        putMappings().then(function (response) {
-            indexDocuments(_docsReady).then(function (resp) {
-                if (resp.errors) {
-                    logger.error("bulk operation completed with errors");
-                } else {
-                    logger.info("stored or refreshed " + _docsReady.length + " documents in '" + _indexName + "' index");
-                    _docsReady = [];
-                }
-            })
+function initIndex(indexName, mappingFunc) {
+    return _client.indices.exists({ index: indexName })
+        .then(function (indexExists) {
+            if (!indexExists) {
+                return _client.indices.create({ index: indexName })
+                    .then(function (response) {
+                        logger.info("Index '" + indexName + "' created");
+                        return mappingFunc();
+                    });
+            }
         });
+}
+
+function handleDiaryEvent(doc) {
+    _diaryEventDocsReady.push(doc);
+}
+
+function flusher(docs, indexName, docType) {
+    if (docs && docs.length > 0) {
+        indexDocuments(docs, indexName, docType).then(function (resp) {
+            if (resp.errors) {
+                logger.error("bulk operation on '" + indexName + "' index completed with errors");
+                return docs;
+            } else {
+                logger.info("stored or refreshed " + docs.length + " documents in '" + indexName + "' index");
+                return [];
+            }
+        });
+    } else {
+        return docs;
     }
 }
 
 var stopIndexer = function () {
-    clearInterval(interval);
+    clearInterval(_interval);
+}
+
+function putMappingsForDiaryEvents() {
+    return _client.indices.putMapping({
+        "index": "diary-events",
+        "type": "diaryEvent",
+        "body": {
+            "diaryEvent": {
+                "properties": {
+                    "Id": {
+                        "type": "text"
+                    },
+                    "DiaryName": {
+                        "type": "text"
+                    },
+                    "Applies": {
+                        "type": "date",
+                        "format": "MM/dd/yyyy HH:mm:ss||yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis",
+                        "ignore_malformed": true
+                    },
+                    "Source": {
+                        "type": "text"
+                    }
+                }
+            }
+        }
+    });
 }
 
 function putMappings() {
     return _client.indices.putMapping({
-        "index": _indexName,
+        "index": cfg.elasticSearchIndexName,
         "type": "diaryLog",
         "body": {
             "diaryLog": {
@@ -102,14 +150,14 @@ function putMappings() {
     });
 }
 
-function indexDocuments(documents) {
+function indexDocuments(documents, indexName, docType) {
     var br = [];
     function create_bulk(bulk_request) {
         var obj
 
         for (i = 0; i < documents.length; i++) {
             obj = documents[i]
-            bulk_request.push({ index: { _index: _indexName, _type: _docType, _id: obj.Id } });
+            bulk_request.push({ index: { _index: indexName, _type: docType, _id: obj.Id } });
             bulk_request.push(obj);
         }
         return bulk_request;
@@ -121,5 +169,17 @@ function indexDocuments(documents) {
             body: br
         });
 }
+
+// function indexDocument(doc, docType, indexName) {
+//     return _client.index({
+//         index: indexName,
+//         type: docType,
+//         id: doc.Id,
+//         body: doc
+//     });
+//     //   , function (error, response) {
+
+//     //   });
+// }
 
 module.exports = Indexer;

@@ -1,5 +1,5 @@
 {
-  "name": "MySelfLog.Synchroniser.ElasticSearch",
+  "name": "myselflog.synchroniser.elasticsearch",
   "version": "1.0.0.0",
   "main": "app.js",
   "repository": "https://github.com/riccardone/MySelfLog.Synchroniser.ElasticSearch",
@@ -10,7 +10,7 @@
     "cross-env": "^5.0.5",
     "elasticsearch": "^13.3.1",
     "log4js": "^2.3.4",
-    "node-eventstore-client": "^0.1.8",
+    "node-eventstore-client": "^0.2.0",
     "uuid": "^3.1.0",
     "yarn": "^1.2.1"
   },

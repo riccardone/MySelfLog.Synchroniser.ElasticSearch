@@ -10,7 +10,7 @@ loggerConfig.run();
 var logger = log4js.getLogger('app');
 
 const credentials = new client.UserCredentials("admin", cfg.eventstorePassword)
-var connection = client.createConnection(cfg.eventstoreConnectionSettings, cfg.eventstoreConnection);
+var connection = client.createConnection(cfg.eventstoreConnectionSettings, cfg.eventstoreConnection, "elastic-synchroniser");
 connection.on("error", err =>
     logger.info(`Error occurred on connection: ${err}`)
 );

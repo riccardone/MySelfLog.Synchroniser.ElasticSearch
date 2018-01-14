@@ -31,9 +31,8 @@ var handlers = {
 };
 
 function handleDiaryCreatedV1(data, metadata) {
-    // var diaryEvent = mapperInstance.toDiaryEventModel(data, metadata);    
-    // eventBus.publish("diaryEventReceived", diaryEvent);
-    // Nothing to do at the moment
+    var diaryEvent = mapperInstance.toDiaryEventModel(data, metadata);    
+    eventBus.publish("diaryEventReceived", diaryEvent);    
 }
 
 function handleFoodLoggedV1(data, metadata) {    
