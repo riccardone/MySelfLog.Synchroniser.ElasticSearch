@@ -711,9 +711,9 @@ ee-first@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
 
-elasticsearch@^13.3.1:
-  version "13.3.1"
-  resolved "https://registry.yarnpkg.com/elasticsearch/-/elasticsearch-13.3.1.tgz#c530aea9afb17ea91c3d0a56f1f111ba49bc9239"
+elasticsearch@^14.0.0:
+  version "14.0.0"
+  resolved "https://registry.yarnpkg.com/elasticsearch/-/elasticsearch-14.0.0.tgz#560317ca87121a73c0895818ae291f5553857bda"
   dependencies:
     agentkeepalive "^2.2.0"
     chalk "^1.0.0"
@@ -1915,9 +1915,9 @@ nise@^1.2.0:
     path-to-regexp "^1.7.0"
     text-encoding "^0.6.4"
 
-node-eventstore-client@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/node-eventstore-client/-/node-eventstore-client-0.2.0.tgz#52c1b25ba6f8986adb743491145c99cc24c8d16b"
+node-eventstore-client@^0.1.11:
+  version "0.1.11"
+  resolved "https://registry.yarnpkg.com/node-eventstore-client/-/node-eventstore-client-0.1.11.tgz#6f5ddcf53747b67e5755fc3b87b9edd2b20da87b"
   dependencies:
     "@types/long" "^3.0.31"
     "@types/node" "^6.0.47"

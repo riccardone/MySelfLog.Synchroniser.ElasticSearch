@@ -8,6 +8,7 @@ var _docsReady = [];
 var _diaryEventDocsReady = [];
 var _client;
 var _interval;
+var _elasticDocTypeForLogs = "diaryLog";
 
 function Indexer(link) {
     init();
@@ -16,9 +17,15 @@ function Indexer(link) {
 
 function subscribeMe(){
     eventBus.subscribe("diaryEventReceived", (doc) => {
+        if(!_diaryEventDocsReady){
+            _diaryEventDocsReady = [];
+        }
         _diaryEventDocsReady.push(doc);
     });
-    eventBus.subscribe("diaryLogReceived", (doc) => {
+    eventBus.subscribe(_elasticDocTypeForLogs + "Received", (doc) => {
+        if(!_docsReady){
+            _docsReady = [];
+        }
         _docsReady.push(doc);
     });
 }
@@ -33,7 +40,7 @@ function init() {
             return initIndex(cfg.elasticSearchIndexName, putMappings);
         }).then((response) => {
             _interval = setInterval(function () {
-                _docsReady = flusher(_docsReady, cfg.elasticSearchIndexName, "diaryLog");
+                _docsReady = flusher(_docsReady, cfg.elasticSearchIndexName, _elasticDocTypeForLogs);
                 _diaryEventDocsReady = flusher(_diaryEventDocsReady, "diary-events", "diaryEvent");
             }, cfg.elasticSearchFlushInterval);
         }).catch((error) => {
@@ -108,7 +115,7 @@ function putMappingsForDiaryEvents() {
 function putMappings() {
     return _client.indices.putMapping({
         "index": cfg.elasticSearchIndexName,
-        "type": "diaryLog",
+        "type": _elasticDocTypeForLogs,
         "body": {
             "diaryLog": {
                 "properties": {
