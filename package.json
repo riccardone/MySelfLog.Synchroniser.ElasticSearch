@@ -8,9 +8,9 @@
   "dependencies": {
     "body-parser": "^1.18.2",
     "cross-env": "^5.0.5",
-    "elasticsearch": "^13.3.1",
+    "elasticsearch": "^14.0.0",
     "log4js": "^2.3.4",
-    "node-eventstore-client": "^0.2.0",
+    "node-eventstore-client": "^0.1.11",
     "uuid": "^3.1.0",
     "yarn": "^1.2.1"
   },
