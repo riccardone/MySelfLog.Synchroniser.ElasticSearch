@@ -1,6 +1,6 @@
 {
-  "name": "myselflog.synchroniser.elasticsearch",
-  "version": "1.0.0.0",
+  "name": "myselflog-synchroniser-elasticsearch",
+  "version": "1.0.0",
   "main": "app.js",
   "repository": "https://github.com/riccardone/MySelfLog.Synchroniser.ElasticSearch",
   "author": "riccardone <riccardo@dinuzzo.it>",
@@ -10,20 +10,18 @@
     "cross-env": "^5.0.5",
     "elasticsearch": "^14.0.0",
     "log4js": "^2.3.4",
+    "moment": "^2.20.1",
     "node-eventstore-client": "^0.1.11",
     "uuid": "^3.1.0",
     "yarn": "^1.2.1"
   },
   "scripts": {
-    "test": "mocha",
-    "ci": "cross-env NODE_ENV=ci mocha",
-    "coverage": "cross-env NODE_ENV=ci nyc mocha",
-    "start": "node ./src/app.js",
-    "deploy-test": "cross-env NODE_ENV=test node ./src/app.js",
-    "deploy-prod": "cross-env NODE_ENV=prod node ./src/app.js",
-    "build-version": "node ./build/get-version.js"
+    "test": "mocha --exit",
+    "start": "node ./src/app.js"
   },
   "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-http": "^3.0.0",
     "eslint": "^4.9.0",
     "istanbul": "^0.4.5",
     "mocha": "^4.0.1",
