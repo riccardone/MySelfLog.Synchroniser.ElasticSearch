@@ -99,9 +99,9 @@ function putMappingsForDiaryEvents() {
                         "type": "text"
                     },
                     "Applies": {
-                        "type": "date",
-                        "format": "MM/dd/yyyy HH:mm:ss||yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis",
-                        "ignore_malformed": true
+                        "type": "date"
+                        //"format": "MM/dd/yyyy HH:mm:ss||yyyyMMdd'T'HHmmssZ||yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis",
+                        //"ignore_malformed": true
                     },
                     "Source": {
                         "type": "text"
@@ -141,9 +141,9 @@ function putMappings() {
                         "type": "text"
                     },
                     "LogDate": {
-                        "type": "date",
-                        "format": "MM/dd/yyyy HH:mm:ss||yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis",
-                        "ignore_malformed": true
+                        "type": "date"
+                        //"format": "MM/dd/yyyy HH:mm:ss||yyyyMMdd'T'HHmmssZ||yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis",
+                        //"ignore_malformed": true
                     },
                     "Source": {
                         "type": "text"
