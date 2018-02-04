@@ -8,13 +8,14 @@
   "dependencies": {
     "body-parser": "^1.18.2",
     "cross-env": "^5.0.5",
-    "elasticsearch": "^14.0.0",
+    "dotenv": "^5.0.0",
+    "elasticsearch": "^14.1.0",
     "log4js": "^2.3.4",
     "moment": "^2.20.1",
     "node-eventstore-client": "^0.1.11",
     "uuid": "^3.1.0",
     "yarn": "^1.2.1"
-  }, 
+  },
   "scripts": {
     "test": "mocha --exit",
     "start": "node ./src/app.js"
