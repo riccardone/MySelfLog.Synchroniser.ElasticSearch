@@ -4,12 +4,12 @@ config.env = 'dev';
 config.host = '0.0.0.0';
 config.port = 2050;
 
-config.eventstoreConnection = 'tcp://eventstore:1113';
-config.eventstoreUsername = 'admin';
-config.eventstorePassword = 'changeit';
-config.eventstoreConnectionSettings = {"admin":"changeit"};
+config.eventstoreConnection = process.env.EventStore_Link || 'tcp://eventstore:1113';
+config.eventstoreUsername = process.env.EventStore_User || 'admin';
+config.eventstorePassword = process.env.EventStore_Password || 'cicciomariano';
+config.eventstoreConnectionSettings = '{'+config.eventstoreUsername+':'+config.eventstorePassword+'}';
 
-config.elasticSearchLink = "http://elasticsearch:9200";
+config.elasticSearchLink = process.env.Elastic_Link || 'http://elasticsearch:9200';
 config.elasticSearchIndexName = "diary-logs";
 config.elasticSearchFlushInterval = 5000;
 

@@ -1,3 +1,4 @@
+require('dotenv').config()
 var cfg = require('./config');
 var client = require('node-eventstore-client');
 var mapperModule = require('./mapper');
@@ -9,7 +10,7 @@ var loggerConfig = require('./logging/');
 loggerConfig.run();
 var logger = log4js.getLogger('app');
 
-const credentials = new client.UserCredentials("admin", cfg.eventstorePassword)
+const credentials = new client.UserCredentials(cfg.eventstoreUsername, cfg.eventstorePassword)
 var connection = client.createConnection(cfg.eventstoreConnectionSettings, cfg.eventstoreConnection, "elastic-synchroniser");
 connection.on("error", err =>
     logger.info(`Error occurred on connection: ${err}`)
