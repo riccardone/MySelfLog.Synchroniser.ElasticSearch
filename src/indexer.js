@@ -32,8 +32,7 @@ function subscribeMe(){
 
 function init() {
     _client = new elasticsearch.Client({
-        host: cfg.elasticSearchLink,
-        log: 'trace'
+        host: cfg.elasticSearchLink        
     });
     initIndex("diary-events", putMappingsForDiaryEvents)
         .then((response) => {
