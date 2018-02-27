@@ -1,16 +1,20 @@
 var elasticsearch = require('elasticsearch');
 var busModule = require('./bus');
 var logger = require('log4js').getLogger('indexer');
-var cfg = require('./config');
 
 var eventBus = busModule();
 var _docsReady = [];
 var _diaryEventDocsReady = [];
 var _client;
 var _interval;
-var _elasticDocTypeForLogs = "diaryLog";
+var _elasticDocTypeForLogs;
+var _indexName;
+var _flushInterval;
 
-function Indexer(link) {
+function Indexer(link, indexName, docType, flushInterval) {
+    _indexName = indexName;
+    _elasticDocTypeForLogs = docType;
+    _flushInterval = flushInterval;
     init();
     subscribeMe();
 }
@@ -32,16 +36,16 @@ function subscribeMe(){
 
 function init() {
     _client = new elasticsearch.Client({
-        host: cfg.elasticSearchLink        
+        host: 'http://elasticsearch:9200'        
     });
     initIndex("diary-events", putMappingsForDiaryEvents)
         .then((response) => {
-            return initIndex(cfg.elasticSearchIndexName, putMappings);
+            return initIndex(_indexName, putMappings);
         }).then((response) => {
             _interval = setInterval(function () {
-                _docsReady = flusher(_docsReady, cfg.elasticSearchIndexName, _elasticDocTypeForLogs);
+                _docsReady = flusher(_docsReady, _indexName, _elasticDocTypeForLogs);
                 _diaryEventDocsReady = flusher(_diaryEventDocsReady, "diary-events", "diaryEvent");
-            }, cfg.elasticSearchFlushInterval);
+            }, _flushInterval);
         }).catch((error) => {
             logger.error(error);
         })
@@ -113,7 +117,7 @@ function putMappingsForDiaryEvents() {
 
 function putMappings() {
     return _client.indices.putMapping({
-        "index": cfg.elasticSearchIndexName,
+        "index": _indexName,
         "type": _elasticDocTypeForLogs,
         "body": {
             "diaryLog": {
