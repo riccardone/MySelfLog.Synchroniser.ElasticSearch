@@ -1,5 +1,4 @@
 var logger = require('log4js').getLogger('service');
-var cfg = require('./config');
 var indexerEventsModule = require('./indexer');
 var indexerLogsModule = require('./indexer');
 
@@ -15,7 +14,7 @@ var indexer;
 
 function Service(mapper) {
     mapperInstance = mapper;    
-    indexer = new indexerLogsModule(cfg.elasticSearchLink, cfg.elasticSearchIndexName, "diaryLog", 5000);    
+    indexer = new indexerLogsModule('http://elasticsearch:9200', 'diary-logs', 'diaryLog', 5000);    
 }
 
 function start(conn, credentials) {

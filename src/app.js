@@ -1,5 +1,3 @@
-require('dotenv').config()
-var cfg = require('./config');
 var client = require('node-eventstore-client');
 var mapperModule = require('./mapper');
 var serviceModule = require('./service');
@@ -10,8 +8,8 @@ var loggerConfig = require('./logging/');
 loggerConfig.run();
 var logger = log4js.getLogger('app');
 
-const credentials = new client.UserCredentials(cfg.eventstoreUsername, cfg.eventstorePassword)
-var connection = client.createConnection(cfg.eventstoreConnectionSettings, cfg.eventstoreConnection, "myselflog-synchroniser-elasticsearch");
+const credentials = new client.UserCredentials('admin', 'changeit')
+var connection = client.createConnection("{'admin':'changeit'}", 'tcp://eventstore:1113', 'myselflog-synchroniser-elasticsearch');
 connection.on("error", err =>
     logger.info(`Error occurred on connection: ${err}`)
 );
