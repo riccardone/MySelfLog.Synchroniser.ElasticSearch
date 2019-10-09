@@ -91,7 +91,7 @@ var stopIndexer = function () {
 function putMappingsForDiaryEvents() {
     return _client.indices.putMapping({
         "index": "diary-events",
-        "type": "diaryEvent",
+        // "type": "diaryEvent",
         "body": {
             "diaryEvent": {
                 "properties": {
