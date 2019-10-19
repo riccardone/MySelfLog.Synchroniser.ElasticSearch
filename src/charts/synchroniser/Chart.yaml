@@ -1,0 +1,4 @@
+apiVersion: v1
+description: Myselflog.Synchroniser keep up-to-date a read model in an ElasticSearch index 
+name: synchroniser
+version: v0.1.0
