@@ -14,8 +14,3 @@ spec:
     targetPort: {{ .Values.service.internalPort }}
   selector:
     app: {{ template "fullname" . }}
-{{ if .Values.ingress.enabled }}
-  type: ClusterIP
-{{ else }}
-  type: LoadBalancer
-{{ end }}
