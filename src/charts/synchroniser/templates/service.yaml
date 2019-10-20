@@ -7,6 +7,10 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
-spec:  
+spec:
+  ports:
+  - port: {{ .Values.service.externalPort }}
+    protocol: TCP
+    targetPort: {{ .Values.service.internalPort }}
   selector:
     app: {{ template "fullname" . }}
